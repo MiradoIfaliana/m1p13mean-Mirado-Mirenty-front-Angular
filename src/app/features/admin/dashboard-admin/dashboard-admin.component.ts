@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { VisitorsChartComponent } from '../visitors-chart.component/visitors-chart.component';
 
 export interface Boutique {
   _id: string;
@@ -26,7 +27,7 @@ export interface DashboardStats {
 
 @Component({
   selector: 'app-dashboard-admin',
-  imports: [],
+  imports: [VisitorsChartComponent],
   templateUrl: './dashboard-admin.component.html',
   styleUrl: './dashboard-admin.component.scss',
 })
@@ -42,7 +43,7 @@ export class DashboardAdminComponent {
     visitors: {
       type: "daily",
       from: "2026-01-29",
-      to: "2026-02-04",
+      to: "2026-02-04 ",
       data: [
         { date: "2026-01-29", count: 120 },
         { date: "2026-01-30", count: 135 },

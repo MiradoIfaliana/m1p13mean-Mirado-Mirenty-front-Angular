@@ -45,7 +45,7 @@
         <span class="px-3 py-1 bg-gray-100 text-xs rounded-full text-gray-600">{{ data.visitors.type }}</span>
       </div>
       <!-- Ici vous intégreriez NgCharts ou ApexCharts -->
-      <div class="h-64 bg-gray-50 rounded-xl flex items-end justify-between p-4 space-x-2">
+      <!-- <div class="h-64 bg-gray-50 rounded-xl flex items-end justify-between p-4 space-x-2">
         @for (item of data.visitors.data; track item.date) {
           <div class="flex flex-col items-center w-full group">
             <div [style.height.%]="(item.count / 200) * 100"
@@ -57,7 +57,8 @@
             <span class="text-[10px] text-gray-400 mt-2 rotate-45 md:rotate-0">{{ item.date  }}</span>
           </div>
         }
-      </div>
+      </div> -->
+      <app-visitors-chart [visitors]="data.visitors"></app-visitors-chart>
     </div>
 
     <!-- Liste Top Boutique -->
