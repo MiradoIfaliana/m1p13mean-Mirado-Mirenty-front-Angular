@@ -42,7 +42,7 @@ export class DashboardAdminComponent {
     visitors: {
       type: "daily",
       from: "2026-01-29",
-      to: "2026-02-04 notrt eelld==d=d=d=d=d=d=d=doopppppppppkjjjjjjjjjdkdkmvnnvn  ",
+      to: "2026-02-04",
       data: [
         { date: "2026-01-29", count: 120 },
         { date: "2026-01-30", count: 135 },
