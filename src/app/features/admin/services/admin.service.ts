@@ -3,7 +3,37 @@ import { environment } from "../../../../environments/environement";
 import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { AdminHttpClient } from "../../../a-httpclient-simulation/admin-http-client";
+import { Categorie } from "../../../core/store/categorie.state";
 
+// store.model.ts
+export interface centerUpdate {
+  description: string;
+  horaires: {
+    jours: string;
+    heures: string;
+  };
+  contact: string;
+  email: string;
+}
+export interface ZoneCreate {
+  etage: string;
+  bloc: string;
+  box: string;
+  description: string;
+}
+
+export interface Zone {
+  _id: string;
+  etage: string;
+  bloc: string;
+  box: string;
+  status: string;
+  description: string;
+}
+export interface CategorieCreate {
+  nom: string;
+  iconClass: string;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -21,19 +51,26 @@ export class AdminService {
     return this.http.get(`${this.API_URL}/center`);
   }
 
-  updateCenter(data: any): Observable<any> {
-    return this.http.put(`${this.API_URL}/center`, data);
+  updateCenter(data: centerUpdate, file?: File|null): Observable<any> {
+    const formData = new FormData();
+    formData.append( 'data',
+      new Blob([JSON.stringify(data)], {type: 'application/json'})
+    );
+    if (file) {
+      formData.append('image', file);
+    }
+    return this.http.put(`${this.API_URL}/center`, formData);
   }
 
   // ======================================================
   // ZONES
   // ======================================================
 
-  createZone(payload: any): Observable<any> {
+  createZone(payload: ZoneCreate): Observable<any> {
     return this.http.post(`${this.API_URL}/zones`, payload);
   }
 
-  getZones(): Observable<any[]> {
+  getZones(): Observable<Zone[]> {
     return this.http.get(`${this.API_URL}/zones`);
   }
 
@@ -41,11 +78,11 @@ export class AdminService {
   // CATÉGORIES
   // ======================================================
 
-  createCategory(payload: any): Observable<any> {
+  createCategory(payload: CategorieCreate ): Observable<any> {
     return this.http.post(`${this.API_URL}/categories`, payload);
   }
 
-  getCategories(): Observable<any[]> {
+  getCategories(): Observable<Categorie[]> {
     return this.http.get(`${this.API_URL}/categories`);
   }
 

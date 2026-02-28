@@ -60,7 +60,7 @@ export class RegisterBoutiqueComponent implements OnInit, OnDestroy {
         this.boutiqueStore.resetStatus();
         this.router.navigateByUrl('/home');
       }
-      if (this.boutiqueStore.errorRgst()) {
+      if (this.boutiqueStore.errorRgst()){
         this.notificationService.showError(this.boutiqueStore.errorRgst()!);
         this.boutiqueStore.resetStatus();
       }

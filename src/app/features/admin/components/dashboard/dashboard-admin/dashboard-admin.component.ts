@@ -49,9 +49,9 @@ export class DashboardAdminComponent implements OnInit {
    data = computed(()=>this.adminStore.dashboard());
   constructor(private adminStore:AdminStore, private notificationService:NotificationService){
     effect(() => {
-      if (this.adminStore.errorState()) {
-        this.notificationService.showError(this.adminStore.errorState()!);
-        this.adminStore.resetStatus();
+      if (this.adminStore.errorStat()) {
+        this.notificationService.showError(this.adminStore.errorStat()!);
+        this.adminStore.resetStatusStat();
       }
     });
   }

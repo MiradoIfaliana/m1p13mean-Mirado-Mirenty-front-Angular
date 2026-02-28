@@ -13,6 +13,29 @@
 
   <!-- Grille de Catégories -->
   <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+    <!-- SKELETON LOADING : Affiché quand loadingCategories() est true -->
+    @if (loadingCategories()) {
+      @for (i of [1,2,3,4]; track $index) {
+        <div class="relative bg-white border border-slate-50 p-6 rounded-[2rem] overflow-hidden animate-pulse">
+          <!-- Cercle décoratif fantôme -->
+          <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-slate-50 rounded-full"></div>
+
+          <div class="relative z-10 flex flex-col items-center space-y-4">
+            <!-- Carré icône fantôme -->
+            <div class="w-16 h-16 bg-slate-100 rounded-2xl"></div>
+
+            <!-- Texte fantôme -->
+            <div class="space-y-2 w-full flex flex-col items-center">
+              <div class="h-3 bg-slate-100 rounded-full w-24"></div>
+              <div class="h-2 bg-slate-50 rounded-full w-12"></div>
+            </div>
+          </div>
+
+          <!-- Effet de balayage brillant (Shimmer) -->
+          <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent animate-[shimmer_1.5s_infinite]"></div>
+        </div>
+      }
+    }
     @for (cat of categories(); track cat._id) {
       <div class="group relative bg-white border border-slate-100 p-6 rounded-[2rem] transition-all duration-500 hover:shadow-2xl hover:shadow-dark-blue/5 hover:border-teal/30 overflow-hidden cursor-pointer">
 
@@ -37,19 +60,21 @@
         <div class="absolute top-4 right-4 w-2 h-2 rounded-full bg-yellow opacity-0 group-hover:opacity-100 transition-opacity"></div>
       </div>
     }
-
+    @if(!loadingCategories()) {
     <!-- Bouton d'ajout rapide (Style Pointillé) -->
-    <button (click)="isAddModalOpen.set(true)" type="button" class="border-2 border-dashed border-slate-200 p-6 rounded-[2rem] flex flex-col items-center justify-center gap-3 text-slate-300 hover:border-teal hover:text-teal transition-all group">
-      <div class="w-12 h-12 rounded-full border-2 border-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-        <i class="fas fa-plus"></i>
-      </div>
-      <span class="text-[10px] font-black uppercase tracking-widest">Nouvelle Catégorie</span>
-    </button>
+      <button (click)="isAddModalOpen.set(true)" type="button" class="border-2 border-dashed border-slate-200 p-6 rounded-[2rem] flex flex-col items-center justify-center gap-3 text-slate-300 hover:border-teal hover:text-teal transition-all group">
+        <div class="w-12 h-12 rounded-full border-2 border-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <i class="fas fa-plus"></i>
+        </div>
+        <span class="text-[10px] font-black uppercase tracking-widest">Nouvelle Catégorie</span>
+      </button>
+    }
+
   </div>
   @if(isAddModalOpen()) {
     <app-create-categorie
       (close)="isAddModalOpen.set(false)"
-      (submitZone)="handleAdd($event)">
+      (submitCategory)="handleAdd($event)">
     </app-create-categorie>
   }
 </div>

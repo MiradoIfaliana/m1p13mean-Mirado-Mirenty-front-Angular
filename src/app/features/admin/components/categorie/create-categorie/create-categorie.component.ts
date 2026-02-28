@@ -1,5 +1,6 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, computed, output, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AdminStore } from '../../../store/admin.store';
 
 @Component({
   selector: 'app-create-categorie',
@@ -12,6 +13,8 @@ export class CreateCategorieComponent {
   submitCategory = output<any>();
 
   categoryForm: FormGroup;
+  loadingAddCategorie = computed(()=>this.adminStore.loadingAddCategorie());
+
 
   // Liste d'icônes prédéfinies pour le choix utilisateur
   icons = signal([
@@ -34,7 +37,7 @@ export class CreateCategorieComponent {
   // Dans ton composant
   searchTerm = signal('');
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private adminStore:AdminStore) {
     this.categoryForm = this.fb.group({
       nom: ['', [Validators.required, Validators.minLength(3)]],
       iconClass: ['fa-solid fa-laptop', Validators.required]
