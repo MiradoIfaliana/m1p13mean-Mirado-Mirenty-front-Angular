@@ -4,7 +4,7 @@ import { VisitorsChartComponent } from '../visitors-chart.component/visitors-cha
 import { AdminStore } from '../../../store/admin.store';
 import { NotificationService } from '../../../../../shared/services/notification.service';
 
-export interface Boutique {
+export interface BoutiqueSimple {
   _id: string;
   nom: string;
 }
@@ -18,7 +18,7 @@ export interface DashboardStats {
   nbBoutiqueActive: number;
   nbPromotionEnCours: number;
   nbUserClient: number;
-  topBoutique: Boutique[];
+  topBoutique: BoutiqueSimple[];
   visitors: {
     type: string;
     from: string;

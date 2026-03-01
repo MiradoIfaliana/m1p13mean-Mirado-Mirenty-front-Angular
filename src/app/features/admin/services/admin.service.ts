@@ -34,6 +34,20 @@ export interface CategorieCreate {
   nom: string;
   iconClass: string;
 }
+
+// boutique.model.ts
+
+export interface Boutique {
+  _id: string;
+  email: string;
+  nom: string;
+  logoUrl: string;
+  categorie: { _id: string; nom: string };
+  horaires: { jours: string; heures: string };
+  contact: string;
+  status: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -90,9 +104,13 @@ export class AdminService {
   // BOUTIQUES EN ATTENTE
   // ======================================================
 
-  getPendingBoutiques(): Observable<any[]> {
-    const params = new HttpParams().set('status', 'EN_ATTENTE');
-    return this.http.get(`${this.API_URL}/boutiques`, params);
+  getBoutiques(status:string|null): Observable<Boutique[]> {
+    if(status!=null){
+      const params = new HttpParams().set('status', status);
+      return this.http.get(`${this.API_URL}/boutiques`, params);
+    }else{
+      return this.http.get(`${this.API_URL}/boutiques`);
+    }
   }
 
   // ======================================================

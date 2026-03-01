@@ -2,7 +2,7 @@ import { Injectable, signal, computed } from '@angular/core'
 import { catchError, firstValueFrom, of, tap } from 'rxjs'
 import { DashboardStats } from '../components/dashboard/dashboard-admin/dashboard-admin.component'
 import { StatisticsAdminService } from '../services/statistics-admin.service';
-import { AdminService, CategorieCreate, centerUpdate, Zone, ZoneCreate } from '../services/admin.service';
+import { AdminService, Boutique, CategorieCreate, centerUpdate, Zone, ZoneCreate } from '../services/admin.service';
 import { CenterProfile } from '../components/profil-center/center-profil/center-profil.component';
 import { Categorie } from '../../../core/store/categorie.state';
 
@@ -173,7 +173,7 @@ export class AdminStore {
     this._successAddCategorie.set(false);
 
     this.adminService.createCategory(categorieCreate).subscribe({
-      next: (newCat) => {
+      next: () => {
         this._loadingAddCategorie.set(false);
         this._successAddCategorie.set(true);
       },
@@ -193,6 +193,116 @@ export class AdminStore {
     this._successAddCategorie.set(false);
     this._errorAddCategorie.set(null);
   }
+
+  // --- ÉTATS DES BOUTIQUES ---
+  private _boutiques = signal<Boutique[] | null>(null);
+  private _loadingBoutiques = signal<boolean>(false);
+
+  readonly boutiques = this._boutiques.asReadonly();
+  readonly loadingBoutiques = computed(() => this._loadingBoutiques());
+  boutiquesCenter(status: string | null = null) {
+    this._loadingBoutiques.set(true);
+
+    this.adminService.getBoutiques(status).subscribe({
+      next: (res) => {
+        this._loadingBoutiques.set(false);
+        this._boutiques.set(res);
+      },
+      error: (error) => {
+        this._loadingBoutiques.set(false);
+        console.error('Erreur lors du chargement des boutiques:', error);
+      }
+    });
+  }
+
+  // --- ÉTATS DES ACTIONS SUR BOUTIQUE ---
+  private _loadingActionBoutique = signal<string[]>([]);
+  private _successActionBoutique = signal<string[]>([]);
+  private _errorActionBoutique = signal<{id:string,error:string}[]>([]);
+
+  //readonly loadingActionBoutique = computed(() => this._loadingActionBoutique());
+  readonly successActionBoutique = computed(() => this._successActionBoutique());
+  readonly errorActionBoutique = computed(() => this._errorActionBoutique());
+
+  loadingActionBoutiqueById(id: string) {
+    return computed(() => this._loadingActionBoutique().includes(id));
+  }
+  successActionBoutiqueById(id: string) {
+    return computed(() => this._successActionBoutique().includes(id));
+  }
+  errorActionBoutiqueById(id: string) {
+    return computed(() =>
+      this._errorActionBoutique().find(e => e.id === id)?.error || 'erreur d\'operation'
+    );
+  }
+
+  lastIdInSuccessActionBoutiqueById() {
+    return computed(() => this.successActionBoutique()[this.successActionBoutique().length-1]);
+  }
+  lastIdInErrorActionBoutique() {
+    return computed(() => this.errorActionBoutique()[this.errorActionBoutique().length-1]);
+  }
+
+  validateBoutique(id: string) {
+    this._startAction(id);
+    this.adminService.validateBoutique(id).subscribe({
+      next: () => this._handleActionSucces(id),
+      error: (err) => this._handleActionError(id,err)
+    });
+  }
+
+  activateBoutique(id: string) {
+    this._startAction(id);
+    this.adminService.activateBoutique(id).subscribe({
+      next: () => this._handleActionSucces(id),
+      error: (err) => this._handleActionError(id,err)
+    });
+  }
+
+  disableBoutique(id: string) {
+    this._startAction(id);
+    this.adminService.disableBoutique(id).subscribe({
+      next: () => this._handleActionSucces(id),
+      error: (err) => this._handleActionError(id,err)
+    });
+  }
+
+  // --- MÉTHODES PRIVÉES UTILITAIRES ---
+
+  private _startAction(id: string) {
+    //inserer l'id en cours d'operation
+    this._loadingActionBoutique().push(id);
+    //supprimer l'erreur stocké de cette id
+    this._errorActionBoutique.update(objErrors =>
+      objErrors.filter(objErr => objErr.id !== id)
+    );
+  }
+
+  private _handleActionError(id:string,error: any) {
+    //en enleve le produit en attente d'operation
+    this._loadingActionBoutique.update(items =>
+      items.filter(item => item !== id)
+    );
+    //ajouter l'erreur
+    this._errorActionBoutique().push({id,error:error?.error?.message || "L'opération a échoué."});
+  }
+
+  private _handleActionSucces(id:string) {
+    this._loadingActionBoutique.update(items =>
+      items.filter(item => item !== id)
+    );
+    this._successActionBoutique().push(id)
+  }
+
+  resetStatusActionBoutique(id:string) {
+    this._errorActionBoutique.update(objErrors =>
+      objErrors.filter(objErr => objErr.id !== id)
+    );
+    this._loadingActionBoutique.update(items =>
+      items.filter(item => item !== id)
+    );
+  }
+
 
   // register(boutiqueRegister:BoutiqueRegister,file:File|null){
   //   if (this.loadingRgst()) {
