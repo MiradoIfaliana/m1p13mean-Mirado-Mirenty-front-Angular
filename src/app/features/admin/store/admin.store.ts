@@ -119,9 +119,14 @@ export class AdminStore {
     }
     this._loadingAddZone.set(true);
     this.adminService.createZone(zoneCreate).subscribe({
-      next : () => {
+      next : (newZone) => {
         this._loadingAddZone.set(false);
         this._successAddZone.set(true);
+        // Mise à jour optimiste du signal local
+        const current = this._zones();
+        if (current) {
+          this._zones.set([newZone, ...current]);
+        }
       },
       error : (error) =>{
         this._loadingAddZone.set(false);
@@ -176,9 +181,14 @@ export class AdminStore {
     this._successAddCategorie.set(false);
 
     this.adminService.createCategory(categorieCreate).subscribe({
-      next: () => {
+      next: (newCat) => {
         this._loadingAddCategorie.set(false);
         this._successAddCategorie.set(true);
+        // Mise à jour optimiste du signal local
+        const current = this._categories();
+        if (current) {
+          this._categories.set([newCat, ...current]);
+        }
       },
       error: (error) => {
         this._loadingAddCategorie.set(false);
@@ -295,6 +305,8 @@ export class AdminStore {
       items.filter(item => item !== id)
     );
     this._successActionBoutique().push(id)
+    //update liste
+    this.boutiques();
   }
 
   resetStatusActionBoutique(id:string) {
@@ -384,6 +396,8 @@ export class AdminStore {
   private _handlePromoSuccess(id: string) {
     this._loadingActionPromo.update(ids => ids.filter(i => i !== id));
     this._successActionPromo.update(ids => [...ids, id]);
+    //update liste
+    this.promotions();
   }
 
 
