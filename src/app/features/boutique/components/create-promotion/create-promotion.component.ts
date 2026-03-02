@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, output, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, computed, OnDestroy, output, signal } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { PromotionCreate } from '../../services/boutique.service';
+import { ZodFormValidators } from '../../../../shared/services/zod-form-validators.service';
+import { PromotionSchema } from '../../shema/promotion.shema';
+import { BoutiqueStore } from '../../store/boutique.store';
 
 @Component({
   selector: 'app-create-promotion',
@@ -8,24 +12,38 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   templateUrl: './create-promotion.component.html',
   styleUrl: './create-promotion.component.scss',
 })
-export class CreatePromotionComponent {
+export class CreatePromotionComponent implements OnDestroy {
   close = output<void>();
-  submitPromo = output<any>();
+  submitPromo = output<{promotion:PromotionCreate,image?:File|null}>();
 
-  promoForm: FormGroup;
+  loadingAddPromotion = computed(()=> this.boutiqueStore.loadingAddPromotion());
+
+  //promoForm: FormGroup;
+  promoForm: FormGroup = new FormGroup({
+    titre: new FormControl(null, {validators: [ZodFormValidators.fromZod(PromotionSchema.shape.titre)]}),
+    taux: new FormControl(null, {validators: [ZodFormValidators.fromZod(PromotionSchema.shape.taux)]}),
+    prixInitial: new FormControl<number|null>(null, {validators: [ZodFormValidators.fromZod(PromotionSchema.shape.prixInitial)]}),
+    prixReduit: new FormControl<number|null>(null, {validators: [ZodFormValidators.fromZod(PromotionSchema.shape.prixReduit)]}),
+    description: new FormControl(null, {validators: [ZodFormValidators.fromZod(PromotionSchema.shape.description)]}),
+    dateDebut: new FormControl(null, {validators: [ZodFormValidators.fromZod(PromotionSchema.shape.dateDebut)]}),
+    dateFin: new FormControl(null, {validators: [ZodFormValidators.fromZod(PromotionSchema.shape.dateFin)]}),
+    image: new FormControl(null, {validators: [ZodFormValidators.fromZod(PromotionSchema.shape.image)]}),
+    },
+    { validators: [ZodFormValidators.fromZod(PromotionSchema)]
+  });
   imagePreview = signal<string | null>(null);
 
-  constructor(private fb: FormBuilder) {
-    this.promoForm = this.fb.group({
-      titre: ['', [Validators.required, Validators.minLength(5)]],
-      taux: [0, [Validators.min(1), Validators.max(100)]],
-      prixInitial: [0],
-      prixReduit: [0],
-      description: ['', Validators.required],
-      dateDebut: ['', Validators.required],
-      dateFin: ['', Validators.required],
-      image: [null]
-    });
+  constructor(private boutiqueStore:BoutiqueStore) {
+    // this.promoForm = this.fb.group({
+    //   titre: ['', [Validators.required, Validators.minLength(5)]],
+    //   taux: [0, [Validators.min(1), Validators.max(100)]],
+    //   prixInitial: [0],
+    //   prixReduit: [0],
+    //   description: ['', Validators.required],
+    //   dateDebut: ['', Validators.required],
+    //   dateFin: ['', Validators.required],
+    //   image: [null]
+    // });
 
     // Calcul automatique du prix réduit si le taux change
     this.promoForm.get('taux')?.valueChanges.subscribe(t => this.calculatePrice());
@@ -41,17 +59,42 @@ export class CreatePromotionComponent {
     }
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.promoForm.patchValue({ image: file });
-      const reader = new FileReader();
-      reader.onload = () => this.imagePreview.set(reader.result as string);
-      reader.readAsDataURL(file);
-    }
+  private objectUrl: string | null = null;
+  onFileSelected(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (!input.files || input.files.length === 0) return;
+
+  const file = input.files[0];
+
+  if(!file) return
+  // Révoquer ancienne URL si existe
+  if (this.objectUrl) {
+    URL.revokeObjectURL(this.objectUrl);
   }
 
+  this.objectUrl = URL.createObjectURL(file);
+
+  this.promoForm.controls['image'].setValue(file);
+  this.promoForm.controls['image'].markAsDirty();
+  this.promoForm.controls['image'].updateValueAndValidity();
+  this.imagePreview.set(this.objectUrl);
+}
+
   save() {
-    if (this.promoForm.valid) this.submitPromo.emit(this.promoForm.value);
+    if (this.promoForm.invalid) return;
+    const { image, ...promotion } = this.promoForm.value;
+    this.submitPromo.emit({
+      promotion,
+      image
+    });
+    //(newPromo: PromotionCreate,image?:File|null)
+    this.promoForm.reset();
+    this.imagePreview.set(null);
+  }
+
+  ngOnDestroy(): void {
+    if (this.objectUrl) {
+      URL.revokeObjectURL(this.objectUrl);
+    }
   }
 }

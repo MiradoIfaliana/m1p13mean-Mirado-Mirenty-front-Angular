@@ -9,76 +9,149 @@
         </h2>
         <p class="text-[10px] font-black text-slate-400 uppercase tracking-[3px]">Configuration de l'offre</p>
       </div>
+   <form [formGroup]="promoForm" (ngSubmit)="save()" class="space-y-4">
 
-      <form [formGroup]="promoForm" (ngSubmit)="save()" class="space-y-4">
-        <!-- Titre -->
-        <div class="space-y-1">
-          <label class="text-[10px] font-black text-dark-blue uppercase tracking-widest ml-1">Titre de l'offre</label>
-          <input formControlName="titre" type="text" placeholder="ex: Promo rentrée"
-            class="w-full px-5 py-3 border border-dark-blue rounded-xl focus:ring-4 focus:ring-dark-blue/5 outline-none font-bold text-sm bg-slate-50/50">
+  <!-- Titre -->
+  <div class="space-y-1">
+    <div class="flex justify-between items-end px-1">
+      <label class="text-[10px] font-black text-dark-blue uppercase tracking-widest">Titre de l'offre</label>
+      @if(promoForm.get('titre')?.invalid && promoForm.get('titre')?.dirty) {
+        <span class="text-[9px] font-bold text-red italic animate-in fade-in slide-in-from-right-2">
+          {{ promoForm.get('titre')?.errors?.['zod'] }}
+        </span>
+      }
+    </div>
+    <input formControlName="titre" type="text" placeholder="ex: Promo rentrée"
+      [class.border-red]="promoForm.get('titre')?.invalid && promoForm.get('titre')?.dirty"
+      class="w-full px-5 py-3 border border-dark-blue rounded-xl focus:ring-4 focus:ring-dark-blue/5 outline-none font-bold text-sm bg-slate-50/50 transition-all">
+  </div>
+
+  <!-- Taux & Prix -->
+  <div class="grid grid-cols-3 gap-2">
+    <!-- Taux -->
+    <div class="space-y-1">
+      <label class="text-[10px] font-black text-red uppercase tracking-widest ml-1">Réduction %</label>
+      <input formControlName="taux" type="number"
+        [class.border-red]="promoForm.get('taux')?.invalid && promoForm.get('taux')?.dirty"
+        class="w-full px-5 py-3 border border-dark-blue rounded-xl font-bold text-sm bg-slate-50/50 transition-all">
+      @if(promoForm.get('taux')?.invalid && promoForm.get('taux')?.dirty) {
+        <p class="text-[8px] font-bold text-red px-1 italic">{{ promoForm.get('taux')?.errors?.['zod'] }}</p>
+      }
+    </div>
+
+    <!-- Prix Initial -->
+    <div class="space-y-1">
+      <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Prix Initial</label>
+      <input formControlName="prixInitial" type="text"
+        [class.border-red]="promoForm.get('prixInitial')?.invalid && promoForm.get('prixInitial')?.dirty"
+        class="w-full px-5 py-3 border border-dark-blue rounded-xl font-bold text-sm bg-slate-50/50 transition-all">
+      @if(promoForm.get('prixInitial')?.invalid && promoForm.get('prixInitial')?.dirty) {
+        <p class="text-[8px] font-bold text-red px-1 italic">{{ promoForm.get('prixInitial')?.errors?.['zod'] }}</p>
+      }
+    </div>
+
+    <!-- Prix Promo -->
+    <div class="space-y-1">
+      <label class="text-[10px] font-black text-teal uppercase tracking-widest ml-1">Prix Promo</label>
+      <input formControlName="prixReduit" type="text" readonly
+        [class.border-red]="promoForm.get('prixReduit')?.invalid && promoForm.get('prixReduit')?.dirty"
+        class="w-full px-5 py-3 border border-dark-blue rounded-xl font-bold text-sm bg-slate-50/50 transition-all">
+      @if(promoForm.get('prixReduit')?.invalid && promoForm.get('prixReduit')?.dirty) {
+        <p class="text-[8px] font-bold text-red px-1 italic">{{ promoForm.get('prixReduit')?.errors?.['zod'] }}</p>
+      }
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="space-y-1">
+    <div class="flex justify-between items-end px-1">
+      <label class="text-[10px] font-black text-dark-blue uppercase tracking-widest">Description courte</label>
+      @if(promoForm.get('description')?.invalid && promoForm.get('description')?.dirty) {
+        <span class="text-[9px] font-bold text-red italic animate-in fade-in">{{ promoForm.get('description')?.errors?.['zod'] }}</span>
+      }
+    </div>
+    <textarea formControlName="description" rows="2"
+      [class.border-red]="promoForm.get('description')?.invalid && promoForm.get('description')?.dirty"
+      class="w-full px-5 py-3 border border-dark-blue rounded-xl outline-none font-bold text-xs bg-slate-50/50 resize-none transition-all">
+    </textarea>
+  </div>
+
+  <!-- Dates -->
+  <div class="space-y-1">
+    <div class="grid grid-cols-2 gap-4">
+      <div class="space-y-1">
+        <label class="text-[10px] font-black text-dark-blue uppercase tracking-widest ml-1">Date Début</label>
+        <input formControlName="dateDebut" type="date"
+          [class.border-red]="promoForm.get('dateDebut')?.invalid && promoForm.get('dateDebut')?.dirty"
+          class="w-full px-5 py-3 border border-dark-blue rounded-xl font-bold text-xs bg-slate-50/50 transition-all">
+      </div>
+      <div class="space-y-1">
+        <label class="text-[10px] font-black text-dark-blue uppercase tracking-widest ml-1">Date Fin</label>
+        <input formControlName="dateFin" type="date"
+          [class.border-red]="promoForm.get('dateFin')?.invalid && promoForm.get('dateFin')?.dirty"
+          class="w-full px-5 py-3 border border-dark-blue rounded-xl font-bold text-xs bg-slate-50/50 transition-all">
+      </div>
+    </div>
+    <!-- Erreur globale sur la période (Zod refine) -->
+    @if( promoForm.get('dateDebut')?.dirty && promoForm.get('dateFin')?.dirty && (promoForm.get('dateFin')?.errors?.['zod'] ||
+          (promoForm.errors?.['zod']?.includes('date') )) ) {
+      <p class="text-[9px] font-bold text-red italic text-right px-1 animate-in slide-in-from-top-1">
+        {{ promoForm.get('dateFin')?.errors?.['zod'] || promoForm.errors?.['zod'] }}
+      </p>
+    }
+  </div>
+
+  <!-- Image -->
+  <div class="space-y-2">
+    <div [class.border-red]="promoForm.get('image')?.invalid && promoForm.get('image')?.dirty"
+      class="relative h-24 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/30 group hover:border-teal/50 transition-all cursor-pointer overflow-hidden">
+      <input type="file" (change)="onFileSelected($event)" class="absolute inset-0 opacity-0 z-10 cursor-pointer">
+
+      <div class="flex items-center gap-4 h-full px-6">
+        <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center text-slate-300 overflow-hidden shadow-inner">
+          @if(imagePreview()) {
+            <img [src]="imagePreview()" class="w-full h-full object-cover animate-in zoom-in duration-300">
+          } @else {
+            <i class="fas fa-image text-xl"></i>
+          }
         </div>
+        <div class="flex-1">
+          <p class="text-[10px] font-black text-dark-blue uppercase tracking-widest">
+            {{ imagePreview() ? 'Changer l\'affiche' : 'Choisir l\'affiche' }}
+          </p>
+          <p class="text-[9px] text-slate-400 font-bold">PNG, JPG (Max 1MB)</p>
+        </div>
+      </div>
+    </div>
+    @if(promoForm.get('image')?.invalid && promoForm.get('image')?.dirty) {
+      <p class="text-[9px] font-bold text-red italic ml-2 animate-in fade-in">
+        {{ promoForm.get('image')?.errors?.['zod'] }}
+      </p>
+    }
+  </div>
 
-        <!-- Taux & Prix -->
-        <div class="grid grid-cols-3 gap-2">
-          <div class="space-y-1">
-            <label class="text-[10px] font-black text-red uppercase tracking-widest ml-1">Réduction %</label>
-            <input formControlName="taux" type="number" class="w-full px-5 py-3 border border-dark-blue rounded-xl font-bold text-sm bg-slate-50/50">
-          </div>
-          <div class="space-y-1">
-            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Prix Initial</label>
-            <input formControlName="prixInitial" type="number" class="w-full px-5 py-3 border border-slate-200 rounded-xl font-bold text-sm bg-white">
-          </div>
-          <div class="space-y-1">
-            <label class="text-[10px] font-black text-teal uppercase tracking-widest ml-1">Prix Promo</label>
-            <input formControlName="prixReduit" type="number" readonly class="w-full px-5 py-3 border border-teal/20 rounded-xl font-black text-teal text-sm bg-teal/5">
+  <!-- Actions -->
+  <div class="flex flex-col gap-3 pt-2">
+    <button type="submit" [disabled]="promoForm.invalid || loadingAddPromotion()"
+      class="relative w-full py-4 bg-dark-blue text-white font-black text-xs uppercase tracking-[2px] rounded-xl shadow-xl hover:bg-teal disabled:bg-slate-200 transition-all active:scale-95 shadow-dark-blue/10 overflow-hidden">
+      @if(loadingAddPromotion()) {
+        <div class="absolute inset-0 flex items-center justify-center bg-dark-blue/10 backdrop-blur-[1px]">
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+            <div class="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+            <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
           </div>
         </div>
+      }
+      <span [class.opacity-0]="loadingAddPromotion()">Soumettre au Centre</span>
+    </button>
 
-        <!-- Description -->
-        <div class="space-y-1">
-          <label class="text-[10px] font-black text-dark-blue uppercase tracking-widest ml-1">Description courte</label>
-          <textarea formControlName="description" rows="2" class="w-full px-5 py-3 border border-dark-blue rounded-xl outline-none font-bold text-xs bg-slate-50/50 resize-none"></textarea>
-        </div>
-
-        <!-- Dates -->
-        <div class="grid grid-cols-2 gap-4">
-          <div class="space-y-1">
-            <label class="text-[10px] font-black text-dark-blue uppercase tracking-widest ml-1">Date Début</label>
-            <input formControlName="dateDebut" type="date" class="w-full px-5 py-3 border border-dark-blue rounded-xl font-bold text-xs bg-slate-50/50">
-          </div>
-          <div class="space-y-1">
-            <label class="text-[10px] font-black text-dark-blue uppercase tracking-widest ml-1">Date Fin</label>
-            <input formControlName="dateFin" type="date" class="w-full px-5 py-3 border border-dark-blue rounded-xl font-bold text-xs bg-slate-50/50">
-          </div>
-        </div>
-
-        <!-- Upload Image avec Aperçu Intégré -->
-        <div class="relative h-24 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/30 group hover:border-teal/50 transition-all cursor-pointer overflow-hidden">
-          <input type="file" (change)="onFileSelected($event)" class="absolute inset-0 opacity-0 z-10 cursor-pointer">
-
-          <div class="flex items-center gap-4 h-full px-6">
-            <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center text-slate-300 overflow-hidden shadow-inner">
-              @if(imagePreview()) {
-                <img [src]="imagePreview()" class="w-full h-full object-cover animate-in zoom-in duration-300">
-              } @else {
-                <i class="fas fa-image text-xl"></i>
-              }
-            </div>
-            <div class="flex-1">
-              <p class="text-[10px] font-black text-dark-blue uppercase tracking-widest">
-                {{ imagePreview() ? 'Changer l\'affiche' : 'Choisir l\'affiche' }}
-              </p>
-              <p class="text-[9px] text-slate-400 font-bold">PNG, JPG (Format carré recommandé)</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="flex gap-4 pt-4">
-          <button type="button" (click)="close.emit()" class="flex-1 py-4 text-xs font-black uppercase tracking-widest text-slate-400 hover:text-red transition-colors">Annuler</button>
-          <button type="submit" [disabled]="promoForm.invalid" class="flex-[2] py-4 bg-dark-blue text-white rounded-2xl font-black text-[10px] uppercase tracking-[2px] shadow-xl shadow-dark-blue/20 hover:bg-teal transition-all active:scale-95">Soumettre au Centre</button>
-        </div>
-      </form>
+    <button type="button" (click)="close.emit()" [disabled]="loadingAddPromotion()"
+      class="text-xs text-slate-400 font-bold hover:text-red transition-colors py-2 disabled:opacity-50">
+      Annuler
+    </button>
+  </div>
+</form>
     </div>
 
     <!-- DROITE : LIVE PREVIEW (Visible sur mobile et desktop) -->
@@ -128,10 +201,10 @@
           <div class="flex items-end justify-between border-t border-slate-50 pt-3">
             <div class="flex flex-col">
               <span class="text-[9px] text-slate-300 line-through font-bold italic">
-                {{(promoForm.get('prixInitial')?.value || 0) | number}} Ar
+                {{(promoForm.get('prixInitial')?.value || 0)}} Ar
               </span>
               <span class="text-sm font-black text-dark-blue">
-                {{(promoForm.get('prixReduit')?.value || 0) | number}} Ar
+                {{(promoForm.get('prixReduit')?.value || 0)}} Ar
               </span>
             </div>
             <!-- <div class="h-8 w-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-300">

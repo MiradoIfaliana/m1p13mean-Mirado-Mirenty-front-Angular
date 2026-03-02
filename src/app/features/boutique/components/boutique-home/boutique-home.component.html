@@ -9,10 +9,10 @@
       <!-- Logo avec Badge Catégorie -->
       <div class="relative flex-shrink-0 group">
         <div class="w-32 h-32 md:w-40 md:h-40 bg-white rounded-[2rem] border border-slate-100 shadow-xl flex items-center justify-center p-6 group-hover:scale-105 transition-transform duration-500">
-          <img [src]="shop.logoUrl" [alt]="shop.nom" class="w-full h-full object-contain">
+          <img [src]="shop()?.logoUrl" [alt]="shop()?.nom" class="w-full h-full object-contain">
         </div>
-        <div [title]="shop.categorie.nom" class="absolute -bottom-3 -right-3 bg-yellow text-white p-3 rounded-2xl shadow-lg border-4 border-white">
-          <i [class]="shop.categorie.iconClass" class="text-xl"></i>
+        <div [title]="shop()?.categorie?.nom" class="absolute -bottom-3 -right-3 bg-yellow text-white p-3 rounded-2xl shadow-lg border-4 border-white">
+          <i [class]="shop()?.categorie?.iconClass" class="text-xl"></i>
         </div>
       </div>
 
@@ -20,21 +20,21 @@
       <div class="flex-1 text-center md:text-left space-y-4">
         <div class="space-y-1">
           <span class="text-[10px] font-black text-teal uppercase tracking-[4px]">Boutique Partenaire</span>
-          <h1 class="text-4xl md:text-5xl font-black text-dark-blue tracking-tighter">{{ shop.nom }}</h1>
+          <h1 class="text-4xl md:text-5xl font-black text-dark-blue tracking-tighter">{{ shop()?.nom }}</h1>
         </div>
         <p class="text-slate-400 text-lg font-medium leading-relaxed max-w-2xl italic">
-          "{{ shop.description }}"
+          "{{ shop()?.description }}"
         </p>
 
         <!-- Stats d'engagement -->
         <div class="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
           <div class="px-6 py-3 bg-slate-50 rounded-2xl border border-slate-100 flex items-center gap-3">
             <i class="fas fa-eye text-teal"></i>
-            <span class="text-sm font-black text-dark-blue">{{ shop.vues  }} <span class="text-slate-400 font-bold ml-1 uppercase text-[10px] tracking-widest">Vues</span></span>
+            <span class="text-sm font-black text-dark-blue">{{ shop()?.vues  }} <span class="text-slate-400 font-bold ml-1 uppercase text-[10px] tracking-widest">Vues</span></span>
           </div>
           <div class="px-6 py-3 bg-slate-50 rounded-2xl border border-slate-100 flex items-center gap-3">
             <i class="fas fa-calendar-alt text-orange"></i>
-            <span class="text-sm font-black text-dark-blue">{{ shop.createdAt  }} <span class="text-slate-400 font-bold ml-1 uppercase text-[10px] tracking-widest">Depuis</span></span>
+            <span class="text-sm font-black text-dark-blue">{{ shop()?.createdAt  }} <span class="text-slate-400 font-bold ml-1 uppercase text-[10px] tracking-widest">Depuis</span></span>
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@
       <div class="p-8 bg-yellow text-white relative">
         <i class="fas fa-map-marked-alt absolute right-8 top-8 text-4xl opacity-40 group-hover:scale-125 transition-transform duration-700"></i>
         <h3 class="text-xs font-black uppercase tracking-[3px] text-teal mb-2">Localisation</h3>
-        <p class="text-2xl font-black italic">{{ shop.zone.bloc }} <span class="text-dark-blue text-lg">— {{ shop.zone.etage }}</span></p>
+        <p class="text-2xl font-black italic">{{ shop()?.zone?.bloc }} <span class="text-dark-blue text-lg">— {{ shop()?.zone?.etage }}</span></p>
       </div>
       <div class="p-8 space-y-6 flex-1 bg-slate-50/30">
         <div class="flex items-center gap-4">
@@ -58,11 +58,11 @@
           </div>
           <div>
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Numéro Box</p>
-            <p class="font-black text-dark-blue text-lg">{{ shop.zone.box }}</p>
+            <p class="font-black text-dark-blue text-lg">{{ shop()?.zone?.box }}</p>
           </div>
         </div>
         <p class="text-xs text-slate-400 font-bold leading-relaxed italic border-l-2 border-teal pl-4">
-          {{ shop.zone.description }}
+          {{ shop()?.zone?.description }}
         </p>
       </div>
     </div>
@@ -78,7 +78,7 @@
           </div>
           <div class="min-w-0">
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Boutique</p>
-            <p class="font-black text-dark-blue truncate">{{ shop.contacts.telephoneBoutique }}</p>
+            <p class="font-black text-dark-blue truncate">{{ shop()?.contacts?.telephoneBoutique }}</p>
           </div>
         </div>
 
@@ -88,7 +88,7 @@
           </div>
           <div class="min-w-0">
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Propriétaire (Privé)</p>
-            <p class="font-black text-dark-blue truncate">{{ shop.contacts.telephoneProprio }}</p>
+            <p class="font-black text-dark-blue truncate">{{ shop()?.contacts?.telephoneProprio }}</p>
           </div>
         </div>
 
@@ -98,7 +98,7 @@
           </div>
           <div class="min-w-0">
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">E-mail Officiel</p>
-            <p class="font-black text-dark-blue truncate">{{ shop.contacts.email }}</p>
+            <p class="font-black text-dark-blue truncate">{{ shop()?.contacts?.email }}</p>
           </div>
         </div>
       </div>
@@ -110,8 +110,8 @@
         <h3 class="text-[10px] font-black uppercase tracking-[3px] text-slate-400 border-b border-slate-50 pb-4">Heures d'ouverture</h3>
         <div class="text-center py-6 bg-slate-50 rounded-[2rem] border border-dashed border-slate-200">
            <i class="fas fa-clock text-4xl text-teal/20 mb-4 group-hover:rotate-12 transition-transform duration-500"></i>
-           <p class="text-2xl font-black text-dark-blue">{{ shop.horaires.heures }}</p>
-           <p class="text-sm font-bold text-teal mt-1 tracking-widest uppercase">{{ shop.horaires.jours }}</p>
+           <p class="text-2xl font-black text-dark-blue">{{ shop()?.horaires?.heures }}</p>
+           <p class="text-sm font-bold text-teal mt-1 tracking-widest uppercase">{{ shop()?.horaires?.jours }}</p>
         </div>
       </div>
 
