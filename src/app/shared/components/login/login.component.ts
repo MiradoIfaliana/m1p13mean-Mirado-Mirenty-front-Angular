@@ -1,4 +1,4 @@
-import { Component, effect } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ZodFormValidators } from '../../services/zod-form-validators.service';
 import { LoginSchema } from '../../shemas/login.shema';
@@ -14,7 +14,14 @@ import { AuthStore } from '../../../core/store/auth.store';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+
+  auth_test: any = {
+    admin: { mail: 'admin@centre.com', password: 'admin123' },
+    boutique: { mail: 'boutique@centre.com', password: 'boutique123' },
+    client: { mail: 'client@centre.com', password: 'client123' },
+  };
+
   loginForm:FormGroup = new FormGroup({
       username: new FormControl(null, { validators: [ZodFormValidators.fromZod(LoginSchema.shape.username)] }),
       password: new FormControl<string|null>(null, { validators: [ZodFormValidators.fromZod(LoginSchema.shape.password)] })
@@ -36,6 +43,11 @@ export class LoginComponent {
     });
   }
 
+  ngOnInit() {
+    // Remplissage par défaut au chargement
+    this.fillForm('admin');
+  }
+
   submit(){
     const value = this.loginForm.getRawValue(); //Récupérer l’état brut du formulaire
     const parsed = LoginSchema.safeParse(value); // Valider les données contre le schéma métier
@@ -48,5 +60,13 @@ export class LoginComponent {
   }
   accueil(){
     this.router.navigateByUrl("/home");
+  }
+
+  fillForm(role: string) {
+    const credentials = this.auth_test[role];
+    this.loginForm.patchValue({
+      username: credentials.mail,
+      password: credentials.password
+    });
   }
 }

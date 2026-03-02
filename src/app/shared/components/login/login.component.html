@@ -34,6 +34,21 @@
 
         <p class="text-xs text-dark-blue  mt-2 px-20">Connectez-vous pour accéder à vos outils et services personnalisés</p>
       </div>
+      <!-- Boutons de test rapide -->
+      <div class="flex justify-center gap-2 mb-6 px-13">
+        <button type="button" (click)="fillForm('admin')"
+          class="flex-1 py-1 text-[10px] font-bold border border-red-500 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-colors">
+          TEST ADMIN
+        </button>
+        <button type="button" (click)="fillForm('boutique')"
+          class="flex-1 py-1 text-[10px] font-bold border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-500 hover:text-white transition-colors">
+          TEST BOUTIQUE
+        </button>
+        <button type="button" (click)="fillForm('client')"
+          class="flex-1 py-1 text-[10px] font-bold border border-green-500 text-green-500 rounded-lg hover:bg-green-500 hover:text-white transition-colors">
+          TEST CLIENT
+        </button>
+      </div>
       <form [formGroup]="loginForm" (ngSubmit)="submit()">
         @if (loginForm.get('username')?.invalid && loginForm.get('username')?.dirty ) {
           <small class="text-red"> {{ loginForm.get('username')?.errors?.['zod'] }} </small>
