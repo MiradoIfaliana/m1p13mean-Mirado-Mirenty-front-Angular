@@ -1,76 +1,204 @@
-<section class="py-10">
-  <!-- En-tête de section -->
-  <div class="flex items-end justify-between mb-8">
-    <div>
-      <h2 class="text-3xl font-black text-dark-blue tracking-tight">Offres <span class="text-yellow">Exclusives</span> <span class="text-red-800"> [EXEMPLE FOTSINY IO AFFICHAGE PRODUIT IO FA TSY VOATERY OTRAN'IO ILAY AFFICHAGE HO ATAO]</span></h2>
-      <p class="text-gray-500 text-sm mt-1 font-medium">Nos meilleures réductions du moment, sélectionnées pour vous.</p>
-    </div>
-    <button class="hidden md:flex items-center gap-2 text-dark-blue font-bold text-sm hover:underline">
-      Voir tout <i class="fas fa-arrow-right text-xs"></i>
-    </button>
-  </div>
+<div class="px-6 py-8 space-y-12 bg-[#FDFDFD] min-h-screen">
 
-  <!-- Grille de Produits -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-    @for (product of promotions(); track product.id) {
-      <div class="group relative bg-white rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+  <!-- ================= CATEGORIES (Inchangé mais affiné) ================= -->
+  <section >
 
-        <!-- Badge de réduction -->
-        <div class="absolute top-4 left-4 z-10 flex flex-col gap-2">
-          <span class="bg-red-500 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg uppercase tracking-wider">
-            {{ product.discount }}
-          </span>
-          @if (product.tag) {
-            <span class="bg-dark-blue text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg uppercase tracking-wider">
-              {{ product.tag }}
+    <div class="relative group/nav shadow-sm p-5">
+      <button (click)="scroll(catContainer,'left')"
+        class="absolute left-0 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md border border-slate-100 shadow-xl p-2.5 rounded-full z-10 text-dark-blue hover:text-teal transition-all opacity-0 group-hover/nav:opacity-100 -translate-x-2 group-hover/nav:translate-x-0">‹</button>
+
+      <div #catContainer class="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar px-1  shadow-inner-sm">
+        @for (cat of categories(); track cat._id) {
+          <div class="min-w-[110px] h-[110px] bg-white rounded-[2rem] hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center cursor-pointer group">
+            <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mb-2 group-hover:bg-teal/10 transition-colors">
+              <i [class]="cat.iconClass" class="text-2xl text-dark-blue group-hover:text-teal transition-all duration-500"></i>
+            </div>
+            <span class="text-[9px] font-black uppercase tracking-tighter text-slate-400 group-hover:text-dark-blue transition-colors text-center px-2">
+              {{ cat.nom }}
             </span>
-          }
-        </div>
-
-        <!-- Image avec zoom au hover -->
-        <div class="relative h-64 overflow-hidden bg-gray-50">
-          <img [src]="product.image" [alt]="product.name"
-               class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-
-          <!-- Countdown (Optionnel) -->
-          @if (product.timeLeft) {
-            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/20 shadow-xl">
-              <p class="text-[10px] font-bold text-dark-blue flex items-center gap-2 whitespace-nowrap">
-                <i class="far fa-clock text-red-500 animate-pulse"></i> Expire dans : {{ product.timeLeft }}
-              </p>
-            </div>
-          }
-        </div>
-
-        <!-- Détails du produit -->
-        <div class="p-6">
-          <div class="flex justify-between items-start mb-2">
-            <div>
-              <p class="text-[10px] font-black text-yellow uppercase tracking-widest">{{ product.category }}</p>
-              <h3 class="text-lg font-bold text-dark-blue mt-1 group-hover:text-blue-600 transition-colors">{{ product.name }}</h3>
-            </div>
-            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all shadow-inner">
-              <i class="far fa-heart"></i>
-            </button>
           </div>
-
-          <!-- Prix -->
-          <div class="flex items-center gap-3 mt-4">
-            <span class="text-2xl font-black text-dark-blue">{{ product.newPrice }}€</span>
-            <span class="text-sm text-gray-400 line-through font-medium">{{ product.oldPrice }}€</span>
-          </div>
-
-          <!-- Actions -->
-          <div class="mt-6 flex items-center gap-2">
-            <button class="flex-1 bg-dark-blue text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-900 transition-all active:scale-95 shadow-lg shadow-blue-900/20">
-              Ajouter au panier
-            </button>
-            <button class="w-12 py-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-white hover:border-dark-blue text-dark-blue transition-all">
-              <i class="fas fa-eye text-sm"></i>
-            </button>
-          </div>
-        </div>
+        }
       </div>
-    }
-  </div>
-</section>
+
+      <button (click)="scroll(catContainer,'right')"
+        class="absolute right-0 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md border border-slate-100 shadow-xl p-2.5 rounded-full z-10 text-dark-blue hover:text-teal transition-all opacity-0 group-hover/nav:opacity-100 translate-x-2 group-hover/nav:translate-x-0">›</button>
+    </div>
+  </section>
+
+
+  <!-- ================= BOUTIQUES (Style Minimaliste Luxe) ================= -->
+  <section >
+    <div class="flex items-center gap-3 mb-6">
+      <span class="w-1.5 h-6 bg-teal rounded-full"></span>
+      <h2 class="text-2xl font-black text-dark-blue italic uppercase tracking-tighter">Boutiques</h2>
+    </div>
+
+    <div class="relative group/nav">
+      <button (click)="scroll(shopContainer,'left')"
+        class="absolute left-0 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md border border-slate-100 shadow-xl p-2.5 rounded-full z-10 opacity-0 group-hover/nav:opacity-100 transition-all">‹</button>
+
+      <div #shopContainer class="flex gap-6 overflow-x-auto scroll-smooth no-scrollbar px-1">
+        @for (shop of boutiques().data; track shop._id) {
+          <div class="min-w-[260px] bg-white border border-slate-100 rounded-[0.5rem] shadow-sm hover:shadow-2xl transition-all duration-500 p-3 group">
+            <div class="relative overflow-hidden rounded-[2rem] mb-4">
+              <img [src]="shop.logoUrl" class="w-full h-40 object-cover bg-slate-50 transition-transform duration-700 group-hover:scale-110">
+              <div class="absolute inset-0 bg-gradient-to-t from-dark-blue/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </div>
+
+            <div class="px-3 pb-2 space-y-1">
+              <h3 class="font-black text-dark-blue uppercase italic text-lg tracking-tight truncate">{{ shop.nom }}</h3>
+              <p class="text-[10px] font-bold text-teal uppercase tracking-[2px]">{{ shop.categorie.nom }}</p>
+
+              <div class="pt-3 flex items-center justify-between border-t border-slate-50">
+                <div class="flex flex-col">
+                  <span class="text-[9px] font-black text-slate-300 uppercase italic">{{ shop.horaires.jours }}</span>
+                  <span class="text-[10px] font-bold text-dark-blue/70">{{ shop.horaires.heures }}</span>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-dark-blue group-hover:bg-dark-blue group-hover:text-white transition-colors">
+                  <i class="fas fa-arrow-right text-[10px]"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        @if (boutiques().pagination.hasMore) {
+          <div class="min-w-[200px] flex items-center justify-center">
+            <button class="text-slate-500 font-semibold hover:underline">
+              Voir plus →
+            </button>
+          </div>
+        }
+      </div>
+
+      <button (click)="scroll(shopContainer,'right')"
+        class="absolute right-0 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md border border-slate-100 shadow-xl p-2.5 rounded-full z-10 opacity-0 group-hover/nav:opacity-100 transition-all">›</button>
+    </div>
+  </section>
+  <div class="border border-slate-200"></div>
+
+
+  <!-- ================= PROMOTIONS (Impact Visuel Fort) ================= -->
+  <section>
+    <div class="flex items-center gap-3 mb-6">
+      <span class="w-1.5 h-6 bg-red rounded-full"></span>
+      <h2 class="text-2xl font-black text-dark-blue italic uppercase tracking-tighter">Promotions</h2>
+    </div>
+
+    <div class="relative group/nav">
+      <button (click)="scroll(promoContainer,'left')"
+        class="absolute left-0 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md border border-slate-100 shadow-xl p-2.5 rounded-full z-10 opacity-0 group-hover/nav:opacity-100 transition-all">‹</button>
+
+      <div #promoContainer class="flex gap-6 overflow-x-auto scroll-smooth no-scrollbar px-1">
+        @for (promo of promotions().data; track promo._id) {
+          <div class="min-w-[340px] bg-white border border-slate-100 rounded-[0.5rem] shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden group">
+            <div class="relative h-52 overflow-hidden">
+              <img [src]="promo.imageUrl" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+              <div class="absolute top-4 left-4 bg-red text-white text-[11px] font-black px-4 py-1.5 rounded-xl shadow-2xl italic tracking-tighter animate-pulse">
+                -{{ promo.taux }}%
+              </div>
+              <div class="absolute bottom-5 right-5 flex items-center gap-2 text-white text-[10px] font-bold bg-dark-blue/40 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10">
+                <i class="fas fa-eye text-teal"></i>
+                {{promo.vues }} vues
+              </div>
+            </div>
+
+            <div class="p-6 space-y-4">
+              <div class="space-y-1">
+                <p class="text-[9px] font-black text-teal uppercase tracking-[2px]">{{ promo.nomBoutique }}</p>
+                <h3 class="font-black text-dark-blue uppercase italic text-xl leading-none tracking-tight line-clamp-1">{{ promo.titre }}</h3>
+                <p class="text-sm text-slate-400 font-medium line-clamp-2 italic">"{{ promo.description }}"</p>
+              </div>
+
+              <div class="flex items-center justify-between bg-slate-50/50 p-4 rounded-2xl border border-slate-100">
+                @if (promo.prixInitial && promo.prixInitial > 0) {
+                  <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-2xl border border-slate-100 animate-in fade-in zoom-in duration-300">
+                    <div class="flex flex-col">
+                      <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Prix Offre</span>
+                      <span class=" font-black text-dark-blue leading-none">
+                        {{ (promo.prixReduit && promo.prixReduit > 0) ? (promo.prixReduit ) : '0' }} Ar
+                      </span>
+                    </div>
+
+                    <div class="h-8 w-px bg-slate-200 mx-2"></div>
+
+                    <div class="flex flex-col">
+                      <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Ancien</span>
+                      <span class="text-xs text-slate-300 line-through font-bold italic leading-none">
+                        {{ promo.prixInitial }} Ar
+                      </span>
+                    </div>
+                  </div>
+                } @else {
+                  <!-- Optionnel : Un petit badge informatif si pas de prix (ex: Cadeau ou Avantage) -->
+                  <div class="flex items-center gap-2 py-2 text-teal">
+                    <i class="fas fa-gift text-xs"></i>
+                    <span class="text-[10px] font-bold uppercase tracking-widest">Offre Découverte</span>
+                  </div>
+                }
+                <div class="h-10 w-10 bg-dark-blue rounded-xl flex items-center justify-center text-white shadow-lg shadow-dark-blue/20">
+                  <i class="fas fa-shopping-bag text-sm"></i>
+                </div>
+              </div>
+
+              <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest pt-2 flex items-center gap-2 italic">
+                <i class="far fa-clock text-teal"></i>
+                Expire le {{ promo.dateFin }}
+              </div>
+            </div>
+          </div>
+        }
+        @if (promotions().pagination.hasMore) {
+          <div class="min-w-[200px] flex items-center justify-center">
+            <button class="text-slate-500 font-semibold hover:underline">
+              Voir plus →
+            </button>
+          </div>
+        }
+      </div>
+
+      <button (click)="scroll(promoContainer,'right')"
+        class="absolute right-0 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md border border-slate-100 shadow-xl p-2.5 rounded-full z-10 opacity-0 group-hover/nav:opacity-100 transition-all">›</button>
+    </div>
+  </section>
+  <div class="border border-slate-200"></div>
+
+
+  <!-- ================= ANNONCES (Style Éditorial) ================= -->
+  <section>
+    <div class="flex items-center gap-3 mb-6">
+      <span class="w-1.5 h-6 bg-yellow rounded-full"></span>
+      <h2 class="text-2xl font-black text-dark-blue italic uppercase tracking-tighter">Annonces</h2>
+    </div>
+
+    <div class="relative group/nav">
+      <button (click)="scroll(annContainer,'left')"
+        class="absolute left-0 top-1/2 -translate-y-1/2 bg-white/90 border border-slate-100 shadow-xl p-2.5 rounded-full z-10 opacity-0 group-hover/nav:opacity-100 transition-all">‹</button>
+
+      <div #annContainer class="flex gap-6 overflow-x-auto scroll-smooth no-scrollbar px-1">
+        @for (ann of annonces(); track ann._id) {
+          <div class="min-w-[300px] bg-white border-t-[6px] border-yellow rounded-[0.5rem] shadow-sm hover:shadow-xl transition-all duration-500 p-8 relative overflow-hidden group">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-yellow/5 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
+
+            <time class="text-[9px] font-black text-slate-300 uppercase tracking-[3px] mb-4 block">
+               {{ ann.createdAt }}
+            </time>
+
+            <h3 class="font-black text-dark-blue uppercase italic text-xl mb-4 leading-tight group-hover:text-yellow transition-colors relative z-10">
+              {{ ann.title }}
+            </h3>
+
+            <p class="text-sm text-slate-500 font-medium italic leading-relaxed relative z-10 opacity-80">
+              {{ ann.content }}
+            </p>
+          </div>
+        }
+      </div>
+
+      <button (click)="scroll(annContainer,'right')"
+        class="absolute right-0 top-1/2 -translate-y-1/2 bg-white/90 border border-slate-100 shadow-xl p-2.5 rounded-full z-10 opacity-0 group-hover/nav:opacity-100 transition-all">›</button>
+    </div>
+  </section>
+
+</div>
