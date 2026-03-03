@@ -10,8 +10,8 @@ export class ClientStore {
 
   constructor(private clientService: ClientService, private annoncePublicService: AnnoncePublicService, private categorie:CategoriePublicService) {}
 
-  private _paramsSearch = signal<{params?: { query?: string; category?: string; estFavoris?: boolean; page?: number; limit?: number}}|null>(null);
-
+  private _paramsSearch = signal<{params?: { query?: string; category?: string; estFavoris?: boolean; pageB?: number; limitB?: number;pageP?: number; limitP?: number}}|null>(null);
+  readonly paramsSearch = computed(() => this._paramsSearch());
   // =========================
   //  BOUTIQUES
   // =========================
@@ -24,20 +24,34 @@ export class ClientStore {
   readonly loadingBoutiques = computed(() => this._loadingBoutiques());
   readonly errorBoutiques = computed(() => this._errorBoutiques());
 
-  loadBoutiques(params?: {
-    query?: string;
-    category?: string;
-    estFavoris?: boolean;
-    page?: number;
-    limit?: number;
-  }) {
+  setParamsSearch<K extends keyof { query?: string; category?: string; estFavoris?: boolean; pageB?: number; limitB?: number;pageP?: number; limitP?: number;}>(
+    key: K,value: { query?: string; category?: string; estFavoris?: boolean;  pageB?: number; limitB?: number;pageP?: number; limitP?: number;}[K]
+  ) {
+    this._paramsSearch.update(prev => ({
+      ...prev,
+      [key]: value
+    }));
+  }
+
+
+  loadBoutiques(add=false) {
     this._loadingBoutiques.set(true);
     this._errorBoutiques.set(null);
 
-    this.clientService.getBoutiques(params || {}).subscribe({
+    this.clientService.getBoutiques(this._paramsSearch()?.params || {}).subscribe({
       next: (res) => {
         this._loadingBoutiques.set(false);
-        this._boutiques.set(res);
+        if(add===true){
+          this._boutiques.update(prev => {
+            if (!prev) { return res;}
+            return {
+              ...res,
+              data: [...prev.data, ...res.data]
+            };
+          });
+        }else{
+          this._boutiques.set(res);
+        }
       },
       error: (err) => {
         this._loadingBoutiques.set(false);

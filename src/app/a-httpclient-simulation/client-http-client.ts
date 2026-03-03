@@ -1,3 +1,4 @@
+import { Boutique } from './../features/admin/services/admin.service';
 import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environement";
 import { Observable, of, throwError } from "rxjs";
@@ -117,17 +118,20 @@ private boutiquesDetails: any[] = [
       const query = params?.get('query')?.toLowerCase() || '';
       const page = Number(params?.get('page') || 1);
       const limit = Number(params?.get('limit') || 5);
-
+      const category = Number(params?.get('category') || null);
       // 🔍 FILTRAGE
-      const filtered = this.boutiques.filter(b =>
+      let filtered = this.boutiques.filter(b =>
         b.nom.toLowerCase().includes(query) ||
         b.description.toLowerCase().includes(query) ||
         b.categorie.nom.toLowerCase().includes(query)
       );
+      if(category){
+        filtered = this.boutiques.filter(b => b.categorie._id == category );
+      }
 
       const totalItems = filtered.length;
 
-      // 📄 Pagination réelle
+      // Pagination réelle
       const startIndex = (page - 1) * limit;
       const endIndex = startIndex + limit;
 
@@ -158,6 +162,8 @@ private boutiquesDetails: any[] = [
         p.nomBoutique.toLowerCase().includes(query) ||
         p.description.toLowerCase().includes(query)
       );
+
+
 
       const totalItems = filtered.length;
 

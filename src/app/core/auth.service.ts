@@ -11,13 +11,13 @@ import { BoutiqueRegister } from './store/boutique-public.store';
 export type Role = 'admin' | 'boutique' | 'client' |string | null;
 export interface LoginResponse {
   token: string;
-  role: 'ADMIN' | 'CLIENT' | 'BOUTIQUE' ;
+  role: 'ADMIN' | 'CUSTOMER' | 'OWNER' ;
   email: string;
 }
 export const ROLE_REDIRECT: Record<string, string> = {
   ADMIN: '/admin',
-  BOUTIQUE: '/boutique',
-  CLIENT: '/client',
+  OWNER: '/boutique',
+  CUSTOMER: '/client',
   VISITOR: '/client'
 }
 

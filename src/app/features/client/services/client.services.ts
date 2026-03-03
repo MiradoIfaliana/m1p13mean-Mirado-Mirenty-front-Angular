@@ -129,8 +129,8 @@ export class ClientService {
     query?: string;
     category?: string;
     estFavoris?: boolean;
-    page?: number;
-    limit?: number;
+    pageB?: number;
+    limitB?: number;
   }): Observable<PaginatedResponse<BoutiqueListItem>> {
 
     const queryParams = new URLSearchParams();
@@ -140,8 +140,8 @@ export class ClientService {
     if (params.query) param=param.set('query', params.query);
     if (params.category) param=param.set('category', params.category);
     if (params.estFavoris !== undefined) param=param.set('estFavoris', String(params.estFavoris));
-    if (params.page) param=param.set('page', String(params.page));
-    if (params.limit) param=param.set('limit', String(params.limit));
+    if (params.pageB) param=param.set('page', String(params.pageB));
+    if (params.limitB) param=param.set('limit', String(params.limitB));
 
     return this.http.get<PaginatedResponse<BoutiqueListItem>>(`${this.API_URL}/boutiques`,param);
   }
@@ -162,8 +162,8 @@ export class ClientService {
     query?: string;
     category?: string;
     estFavoris?: boolean;
-    page?: number;
-    limit?: number;
+    pageP?: number;
+    limitP?: number;
   }): Observable<PaginatedResponse<PromotionListItem>> {
 
     let param = new HttpParams();
@@ -171,8 +171,8 @@ export class ClientService {
     if (params.query) param=param.set('query', params.query);
     if (params.category) param=param.set('category', params.category);
     if (params.estFavoris !== undefined) param=param.set('estFavoris', String(params.estFavoris));
-    if (params.page) param=param.set('page', String(params.page));
-    if (params.limit) param=param.set('limit', String(params.limit));
+    if (params.pageP) param=param.set('page', String(params.pageP));
+    if (params.limitP) param=param.set('limit', String(params.limitP));
 
     return this.http.get<PaginatedResponse<PromotionListItem>>(`${this.API_URL}/promotions`,param);
   }

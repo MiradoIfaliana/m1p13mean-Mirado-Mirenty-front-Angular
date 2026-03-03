@@ -4,14 +4,14 @@ import { delay, Observable, of, throwError } from "rxjs";
 
 export interface LoginResponse {
   token: string;
-  role: 'ADMIN' | 'BOUTIQUE' | 'CLIENT';
+  role: 'ADMIN' | 'OWNER' | 'CUSTOMER';
   email: string;
 }
 const fakeUsers = {
   admin: { email: 'admin@centre.com', password: 'admin123', role: 'ADMIN' as const , token : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.admin.fake.jwt.token' },
-  boutique: { email: 'boutique@centre.com', password: 'boutique123', role: 'BOUTIQUE' as const , token : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.boutique.fake.jwt.token' },
-  client: { email: 'client@centre.com', password: 'client123', role: 'CLIENT' as const , token : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.fake.client.jwt.token' },
-  clientNew: { email: 'client-'+new Date()+'@centre.com', password: 'clientnew123', role: 'CLIENT' as const , token : 'eyJhbGciOiJIUzI1NiIs.fake.jwt.token' }
+  boutique: { email: 'boutique@centre.com', password: 'boutique123', role: 'OWNER' as const , token : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.boutique.fake.jwt.token' },
+  client: { email: 'client@centre.com', password: 'client123', role: 'CUSTOMER' as const , token : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.fake.client.jwt.token' },
+  clientNew: { email: 'client-'+new Date()+'@centre.com', password: 'clientnew123', role: 'CUSTOMER' as const , token : 'eyJhbGciOiJIUzI1NiIs.fake.jwt.token' }
 };
 @Injectable({
   providedIn: 'root'
@@ -91,7 +91,7 @@ export class MyAuthHttpClient {
 
       return of({
         token: 'eyJhbGciOiJIUzI1NiIs.fake.jwt.token',
-        role: 'CLIENT',
+        role: 'CUSTOMER',
         email: body.email
       } as T).pipe(delay(800));
     }

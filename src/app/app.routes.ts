@@ -42,7 +42,7 @@ export const routes: Routes =  [
     ]
   },
   //BOUTIQUE
-  { path: 'boutique', component: BoutiqueLayoutComponent, canActivate: [AuthGuard], data: { roles: ['BOUTIQUE'] },
+  { path: 'boutique', component: BoutiqueLayoutComponent, canActivate: [AuthGuard], data: { roles: ['OWNER'] },
     children:[
       {path:'',component:BoutiqueDashboardComponent},
       {path:'home',component: BoutiqueDashboardComponent},
@@ -51,7 +51,7 @@ export const routes: Routes =  [
     ]
   },
   //CLIENT
-  { path: 'client', component: ClientLayoutComponent, canActivate: [AuthGuard], data: { roles: ['CLIENT','VISITOR'] },
+  { path: 'client', component: ClientLayoutComponent, canActivate: [AuthGuard], data: { roles: ['CUSTOMER','VISITOR'] },
     children:[
       {path:'',component:ClientHomeComponent},
       {path:'home',component:ClientHomeComponent},

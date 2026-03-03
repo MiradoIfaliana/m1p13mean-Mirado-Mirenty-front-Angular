@@ -293,5 +293,17 @@ export class ClientHomeComponent implements OnInit {
     this.router.navigate(['client/boutiques', id]);
   }
 
+  selectCategorie(id:string){
+    if(id){
+      this.clientStore.setParamsSearch('category',id)
+      this.clientStore.loadBoutiques();
+    }
+  }
+
+  voirPlusBoutque(){
+    this.clientStore.setParamsSearch('pageB',this.clientStore.paramsSearch()?.params?.pageB||0 + (this.clientStore.paramsSearch()?.params?.limitB||0))
+
+  }
+
 
 }
