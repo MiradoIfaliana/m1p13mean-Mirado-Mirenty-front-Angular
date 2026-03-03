@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './shared/components/login/login.component';
 import { AdminHomeComponent } from './features/admin/components/admin-home/admin-home.component';
 import { BoutiqueHomeComponent } from './features/boutique/components/boutique-home/boutique-home.component';
-import { ClientHomeComponent } from './features/client/client-home/client-home.component';
+import { ClientHomeComponent } from './features/client/components/client-home/client-home.component';
 import { AuthGuard } from './core/auth.guard';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { ClientLayoutComponent } from './layouts/client-layout/client-layout.component';
@@ -18,6 +18,9 @@ import { BoutiquesComponents } from './features/admin/components/boutiques/bouti
 import { PromotionsComponent } from './features/admin/components/promotions/promotions.component';
 import { AnnoncesComponent } from './features/admin/components/annonce/annonces/annonces.component';
 import { BoutiqueDashboardComponent } from './features/boutique/components/boutique-dashboard/boutique-dashboard.component';
+import { PlanCentreComponent } from './features/client/components/plan-centre/plan-centre.component';
+import { BoutiqueDetailsComponent } from './features/client/components/boutique-details.component/boutique-details.component';
+import { PromotionDetailsComponent } from './features/client/components/promotion-details.component/promotion-details.component';
 
 export const routes: Routes =  [
   { path: 'home', component: HomeComponent },
@@ -51,7 +54,10 @@ export const routes: Routes =  [
   { path: 'client', component: ClientLayoutComponent, canActivate: [AuthGuard], data: { roles: ['CLIENT','VISITOR'] },
     children:[
       {path:'',component:ClientHomeComponent},
-      {path:'home',component:ClientHomeComponent}
+      {path:'home',component:ClientHomeComponent},
+      {path:'plan-centre',component:PlanCentreComponent},
+      {path:'boutiques/:id',component:BoutiqueDetailsComponent},
+      {path:'promotions/:id',component:PromotionDetailsComponent},
     ]
   },
   //

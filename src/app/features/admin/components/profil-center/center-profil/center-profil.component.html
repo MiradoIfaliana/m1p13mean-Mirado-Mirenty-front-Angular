@@ -8,10 +8,10 @@
         <span class="text-[10px] font-black uppercase tracking-[4px] text-slate-400">Espace Administration</span>
       </div>
       <h1 class="text-5xl font-black tracking-tighter text-yellow lg:text-6xl">
-        {{ center.nom }}<span class="text-yellow">.</span>
+        {{ center()?.nom }}<span class="text-yellow">.</span>
       </h1>
       <p class="text-slate-400 text-lg max-w-2xl font-light leading-relaxed">
-        {{ center.description }}
+        {{ center()?.description }}
       </p>
     </div>
 
@@ -44,7 +44,7 @@
             </div>
             <div>
               <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Téléphone</p>
-              <p class="font-black text-lg">{{ center.contact }}</p>
+              <p class="font-black text-lg">{{ center()?.contact }}</p>
             </div>
           </div>
 
@@ -54,7 +54,7 @@
             </div>
             <div class="">
               <p class=" font-bold text-slate-400 uppercase tracking-widest mb-1">E-mail Officiel</p>
-              <p class="font-black text-lg truncate">{{ center.email }}</p>
+              <p class="font-black text-lg truncate">{{ center()?.email }}</p>
             </div>
           </div>
         </div>
@@ -64,8 +64,8 @@
       <div class="bg-dark-blue rounded-[2.5rem] p-10 text-white shadow-2xl shadow-dark-blue/20 relative group overflow-hidden">
          <i class="fas fa-clock absolute right-8 top-8 text-white/5 text-6xl group-hover:rotate-12 transition-transform duration-500"></i>
          <h3 class="text-xs font-black uppercase tracking-[3px] text-teal mb-6">Disponibilité</h3>
-         <p class="text-2xl font-black mb-1">{{ center.horaires.jours }}</p>
-         <p class="text-slate-400 font-medium tracking-wide italic">{{ center.horaires.heures }}</p>
+         <p class="text-2xl font-black mb-1">{{ center()?.horaires?.jours }}</p>
+         <p class="text-slate-400 font-medium tracking-wide italic">{{ center()?.horaires?.heures }}</p>
       </div>
     </div>
 
@@ -112,7 +112,7 @@
           <div class="absolute inset-0 flex items-center justify-center transition-transform duration-150 ease-out pointer-events-none"
               [style.transform]="'translate(' + position().x + 'px, ' + position().y + 'px) scale(' + scale() + ')'">
 
-            <img [src]="center.planImageUrl"
+            <img [src]="center()?.planImageUrl"
                 class="w-[100%] md:h-[100%] drop-shadow-[0_40px_80px_rgba(0,0,0,0.15)] select-none">
           </div>
 
@@ -134,8 +134,8 @@
 </div>
 
 @if(isEditModalOpen()) {
-  <app-edit-center-modal 
-    [centerData]="center" 
+  <app-edit-center-modal
+    [centerData]="center"
     (close)="isEditModalOpen.set(false)"
     (submit)="handleUpdate($event)">
   </app-edit-center-modal>

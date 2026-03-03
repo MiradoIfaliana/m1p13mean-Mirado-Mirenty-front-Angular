@@ -1,5 +1,6 @@
-import { Component, DOCUMENT, effect, Inject, OnInit, Renderer2, signal } from '@angular/core';
+import { Component, computed, DOCUMENT, effect, Inject, OnInit, Renderer2, signal } from '@angular/core';
 import { EditCenterModalComponent } from '../edit-center-modal/edit-center-modal.component';
+import { AdminStore } from '../../../store/admin.store';
 
 export interface CenterProfile {
   nom: string;
@@ -26,7 +27,7 @@ export class CenterProfilComponent implements OnInit {
 
   isEditModalOpen = signal(false);
 
-  constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: Document) {
+  constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: Document,private adminStore:AdminStore) {
     //surveille le signal : desactive l'overflow de l'arriere plan quand le sidebar est activé
     effect(() => {
       const open = this.isEditModalOpen();
@@ -72,14 +73,17 @@ export class CenterProfilComponent implements OnInit {
 
 
   // Dans un cas réel, injectez votre service de données ici
-  center: CenterProfile = {
-    nom: "Shopping Center",
-    description: "Le plus grand centre commercial de la ville",
-    horaires: { jours: "Tous les jours", heures: "08h00 - 20h00" },
-    contact: "+261 32 45 678 90",
-    email: "contact@shoppingcenter.com",
-    planImageUrl: "https://e7.pngegg.com/pngimages/193/849/png-clipart-foyleside-shopping-centre-square-one-mall-washington-square-carine-glades-shopping-centre-map-foyleside-shopping-centre-square-one-mall.png"
-  };
+  center = computed(()=>this.adminStore.centerProfil())
+  // CenterProfile = {
+  //   nom: "Shopping Center",
+  //   description: "Le plus grand centre commercial de la ville",
+  //   horaires: { jours: "Tous les jours", heures: "08h00 - 20h00" },
+  //   contact: "+261 32 45 678 90",
+  //   email: "contact@shoppingcenter.com",
+  //   planImageUrl: "https://e7.pngegg.com/pngimages/193/849/png-clipart-foyleside-shopping-centre-square-one-mall-washington-square-carine-glades-shopping-centre-map-foyleside-shopping-centre-square-one-mall.png"
+  // };
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.adminStore.profil();
+  }
 }

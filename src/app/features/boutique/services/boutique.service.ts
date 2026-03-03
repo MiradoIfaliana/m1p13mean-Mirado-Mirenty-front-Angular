@@ -57,7 +57,7 @@ export interface Horaires {
 }
 
 export interface Contacts {
-  telephoneProprio: string;
+  telephoneProprio?: string;
   telephoneBoutique: string;
   email: string;
 }

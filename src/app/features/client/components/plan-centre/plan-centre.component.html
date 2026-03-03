@@ -1,0 +1,58 @@
+<div class="col-span-12 lg:col-span-8">
+      <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-2xl overflow-hidden h-[600px] flex flex-col relative">
+
+        <!-- BARRE D'OUTILS FLOTTANTE (Design Moderne) -->
+        <div class="absolute top-6 right-6 z-10 flex flex-col gap-2 bg-dark-blue/90 backdrop-blur-xl p-2 rounded-2xl border border-white/10 shadow-2xl">
+          <button (click)="handleZoom(0.2)" class="w-10 h-10 rounded-xl hover:bg-teal text-white transition-all flex items-center justify-center">
+            <i class="fas fa-plus text-xs"></i>
+          </button>
+
+          <div class="h-px bg-white/10 mx-2"></div>
+
+          <button (click)="handleZoom(-0.2)" class="w-10 h-10 rounded-xl hover:bg-red text-white transition-all flex items-center justify-center">
+            <i class="fas fa-minus text-xs"></i>
+          </button>
+
+          <div class="h-px bg-white/10 mx-2"></div>
+
+          <button (click)="resetView()" class="w-10 h-10 rounded-xl hover:bg-yellow text-dark-blue bg-white/10 transition-all flex items-center justify-center">
+            <i class="fas fa-sync-alt text-xs"></i>
+          </button>
+        </div>
+
+        <!-- INDICATEUR DE NIVEAU -->
+        <div class=" bottom-6 left-6  px-4 py-2 bg-white/80 backdrop-blur rounded-full border border-slate-100">
+          <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Zoom : </span>
+          <span class="text-xs font-bold text-teal">{{ (scale() * 100).toFixed(0) }}%</span>
+        </div>
+
+        <!-- ZONE DE MANIPULATION (VIEWPORT) -->
+        <div class="flex-1 overflow-hidden relative cursor-move bg-[#F9FAFB]"
+            (mousedown)="onMouseDown($event)"
+            (mousemove)="onMouseMove($event)"
+            (mouseup)="onMouseUp()"
+            (mouseleave)="onMouseUp()">
+
+          <!-- Motif de fond architectural -->
+          <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(var(--color-dark-blue) 1px, transparent 1px); background-size: 32px 32px;"></div>
+
+          <!-- L'IMAGE AVEC TRANSFORMATIONS -->
+          <div class="absolute inset-0 flex items-center justify-center transition-transform duration-150 ease-out pointer-events-none"
+              [style.transform]="'translate(' + position().x + 'px, ' + position().y + 'px) scale(' + scale() + ')'">
+
+            <img [src]="plan().planImageUrl"
+                class=" md:h-[100%] drop-shadow-[0_40px_80px_rgba(0,0,0,0.15)] select-none">
+          </div>
+
+        </div>
+
+        <!-- FOOTER DU PLAN -->
+        <div class="px-8 py-4 bg-white border-t border-slate-50 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-mouse text-teal animate-bounce text-[10px]"></i>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Maintenir le clic pour déplacer</span>
+          </div>
+          <span class="text-[10px] text-slate-300 italic italic">Format : vectoriel HD</span>
+        </div>
+      </div>
+    </div>

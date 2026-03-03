@@ -1,0 +1,141 @@
+<div class="min-h-screen bg-[#FDFDFD] pb-20">
+
+  <!-- BARRE DE NAVIGATION MOBILE (Sticky) -->
+  <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100 px-6 py-4 flex items-center justify-between ">
+    <button type="button" (click)="back()"  class="w-10 h-10 hover:bg-slate-300 rounded-full bg-slate-50 flex items-center justify-center text-dark-blue">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <span class="text-[10px] font-black uppercase tracking-[3px] text-slate-400">Détail Offre</span>
+    <!-- <button class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-dark-blue">
+      <i class="fas fa-share-alt"></i>
+    </button> -->
+  </nav>
+
+  <div class=" mx-auto md:pt-10 px-0 md:px-12">
+    @if (loadingDetails()) {
+      <!-- ================= SKELETON PROMO (Mode Chargement) ================= -->
+      <div class="flex flex-col lg:flex-row gap-12 animate-pulse">
+        <!-- GAUCHE : SKELETON VISUEL -->
+        <div class="w-full lg:w-3/8">
+          <div class="aspect-[4/5] md:aspect-video lg:aspect-square bg-slate-100 md:rounded-[3rem] shadow-sm relative overflow-hidden">
+            <div class="absolute top-8 left-8 w-24 h-20 bg-slate-200 rounded-2xl"></div>
+            <div class="absolute bottom-8 right-8 w-40 h-8 bg-slate-200/50 rounded-xl backdrop-blur-md"></div>
+          </div>
+        </div>
+
+        <!-- DROITE : SKELETON INFOS -->
+        <div class="flex-1 px-6 md:px-0 pt-6 space-y-8">
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-1 bg-slate-100"></div>
+              <div class="h-6 w-40 bg-slate-100 rounded-full"></div>
+            </div>
+            <div class="h-16 md:h-20 w-full bg-slate-100 rounded-3xl"></div>
+            <div class="h-12 w-48 bg-slate-50 rounded-2xl"></div>
+          </div>
+
+          <div class="h-40 w-full bg-slate-50 rounded-[2.5rem]"></div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="h-24 bg-slate-50 rounded-3xl"></div>
+            <div class="h-24 bg-slate-50 rounded-3xl"></div>
+          </div>
+          <div class="h-4 w-64 bg-slate-50 rounded-full mx-auto"></div>
+        </div>
+      </div>
+    } @else {
+      <div class="flex flex-col lg:flex-row gap-12">
+        <!-- GAUCHE : VISUEL DE LA PROMO -->
+        <div class="w-full lg:w-3/8 relative">
+          <div class="sticky top-10">
+            <div class="relative  aspect-[4/5] md:aspect-video lg:aspect-square overflow-hidden md:rounded-[3rem] shadow-2xl group">
+              <img [src]="promotion()?.imageUrl"
+                  class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  alt="Promotion Image">
+
+              <!-- Overlay dégradé pour la lisibilité -->
+              <div class="absolute inset-0 bg-gradient-to-t from-dark-blue/40 via-transparent to-transparent"></div>
+
+              <!-- Badge de réduction flottant -->
+              <div class="absolute top-8 left-8 animate-bounce">
+                <div class="bg-red text-white px-6 py-3 rounded-2xl shadow-2xl flex flex-col items-center">
+                  <span class="text-[10px] font-black uppercase tracking-widest">Remise</span>
+                  <span class="text-3xl font-black italic">-{{ promotion()?.taux }}%</span>
+                </div>
+              </div>
+
+              <!-- Vues cumulées -->
+              <div class="absolute bottom-8 right-8 px-4 py-2 bg-white/20 backdrop-blur-md rounded-xl border border-white/30 text-white text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                <i class="fas fa-eye text-teal"></i>
+                {{ promotion()?.vues }} Personnes intéressées
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DROITE : INFORMATIONS & ACTIONS -->
+        <div class="flex-1 px-6 md:px-0 pt-6 space-y-5">
+
+          <!-- Header Info -->
+          <div class="space-y-2">
+            <div class="flex items-center gap-3">
+              <span class="w-12 h-px bg-teal"></span>
+                <button type="button" (click)=" toBoutiqueDetail(promotion()?.boutiqueId,promotion()?.titre)"
+                  class="text-[20px] font-black text-teal uppercase tracking-[4px] hover:text-dark-blue transition-colors cursor-pointer flex items-center gap-2">
+                  {{ promotion()?.nomBoutique }}
+                  <i class="fas fa-external-link-alt text-[8px]"></i>
+                </button>
+            </div>
+
+            <h1 class="text-5xl md:text-6xl font-black text-dark-blue italic tracking-tighter leading-none">
+              {{ promotion()?.titre }}
+            </h1>
+
+            <div class="flex items-center gap-6 pt-4">
+              <div class="space-y-1">
+                <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest">Prix Promotionnel</p>
+                <div class="flex items-end gap-3">
+                  <span class="text-4xl font-black text-dark-blue tracking-tighter">{{ promotion()?.prixReduit }} Ar</span>
+                  @if(promotion()?.prixInitial) {
+                    <span class="text-sm text-slate-300 line-through font-bold mb-1">{{ promotion()?.prixInitial }} Ar</span>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section Description -->
+          <div class="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 relative overflow-hidden group">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-teal/5 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">À propos de l'offre</p>
+            <p class="text-lg text-slate-600 font-medium italic leading-relaxed relative z-10">
+              " {{ promotion()?.description }} "
+            </p>
+          </div>
+
+          <!-- Validité & Timing -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-6 bg-white border border-slate-100 rounded-3xl space-y-2">
+              <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest">Début de l'offre</p>
+              <div class="flex items-center gap-3 text-dark-blue">
+                <i class="far fa-calendar-check text-teal"></i>
+                <span class="font-black text-sm uppercase">{{ promotion()?.dateDebut  }}</span>
+              </div>
+            </div>
+            <div class="p-6 bg-white border border-slate-100 rounded-3xl space-y-2 border-l-4 border-l-red">
+              <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest">Fin de l'offre</p>
+              <div class="flex items-center gap-3 text-red">
+                <i class="far fa-clock"></i>
+                <span class="font-black text-sm uppercase">{{ promotion()?.dateFin  }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- Footer Info -->
+          <p class="text-[12px] font-bold text-slate-400 text-center italic">
+            Offre publiée le {{ promotion()?.createdAt  }} • Soumise à conditions en magasin.
+          </p>
+        </div>
+      </div>
+    }
+  </div>
+</div>

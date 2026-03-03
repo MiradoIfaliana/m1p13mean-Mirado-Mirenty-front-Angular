@@ -8,7 +8,7 @@ export class BoutiqueStore {
   constructor(private boutiqueService: BoutiqueService, private annoncePublicService: AnnoncePublicService) {}
 
   // =========================
-  // 👤 PROFIL BOUTIQUE
+  //  PROFIL BOUTIQUE
   // =========================
 
   private _profile = signal<MeBoutique | null>(null);
@@ -64,7 +64,7 @@ export class BoutiqueStore {
   }
 
   // =========================
-  // 📦 PRODUITS
+  //  PRODUITS
   // =========================
 
   private _products = signal<Produit[] | null>(null);
@@ -125,7 +125,7 @@ export class BoutiqueStore {
   }
 
   // =========================
-  // 🎯 PROMOTIONS
+  //  PROMOTIONS
   // =========================
 
   private _promotions = signal<Promotion[] | null>(null);

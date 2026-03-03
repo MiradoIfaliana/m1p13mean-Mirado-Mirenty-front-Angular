@@ -15,13 +15,10 @@ export class ClientLayoutComponent {
   //signal pour ouverture et fermeture du sidebar
   isMenuOpen = computed(() => this.asideState.isOpen());
   //menu admin pour sidebar
-  menus = signal<NavItem[]> ([
-    { label: 'Tableau de bord', class_icon: 'fas fa-chart-line', path: '/admin/dashboard', active:false},
-    { label: 'Utilisateurs', class_icon: 'fas fa-users', path: '/admin/users', active:false},
-    { label: 'Infrastructure', class_icon: 'fas fa-server', path: '/admin/infra', active:true},
-    { label: 'Tableau de bord', class_icon: 'fas fa-chart-line', path: '/admin/dashboard', active:false},
-    { label: 'Utilisateurs', class_icon: 'fas fa-users', path: '/admin/users', active:false}
-  ]);
+  menus = signal<NavItem[]>([
+  { label: 'Accueil', class_icon: 'fa-solid fa-house', path: '/client/home', active: false},
+  { label: 'Plan du centre', class_icon: 'fa-solid fa-map-location-dot', path: '/client/plan-centre', active: false}
+]);
   constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: Document,private asideState: AsideState) {
       //surveille le signal : desactive l'overflow de l'arriere plan quand le sidebar est activé
       effect(() => {
@@ -39,7 +36,7 @@ export class ClientLayoutComponent {
 
   activateIndex(path:string) {
     this.menus.update(items =>
-      items.map((item) => ({
+      items.map((item,i) => ({
         ...item,
         active: item.path === path
       }))

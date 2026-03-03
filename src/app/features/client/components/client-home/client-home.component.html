@@ -8,6 +8,14 @@
         class="absolute left-0 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md border border-slate-100 shadow-xl p-2.5 rounded-full z-10 text-dark-blue hover:text-teal transition-all opacity-0 group-hover/nav:opacity-100 -translate-x-2 group-hover/nav:translate-x-0">‹</button>
 
       <div #catContainer class="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar px-1  shadow-inner-sm">
+        @if (loadingCategories()) {
+          @for (i of [1,2,3,4,5,6,7]; track i) {
+            <div class="min-w-[110px] h-[110px] bg-white rounded-[2rem] flex flex-col items-center justify-center animate-pulse">
+              <div class="w-12 h-12 bg-slate-200 rounded-2xl mb-2"></div>
+              <div class="h-2 w-16 bg-slate-100 rounded-full"></div>
+            </div>
+          }
+        }
         @for (cat of categories(); track cat._id) {
           <div class="min-w-[110px] h-[110px] bg-white rounded-[2rem] hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center cursor-pointer group">
             <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mb-2 group-hover:bg-teal/10 transition-colors">
@@ -38,8 +46,23 @@
         class="absolute left-0 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md border border-slate-100 shadow-xl p-2.5 rounded-full z-10 opacity-0 group-hover/nav:opacity-100 transition-all">‹</button>
 
       <div #shopContainer class="flex gap-6 overflow-x-auto scroll-smooth no-scrollbar px-1">
-        @for (shop of boutiques().data; track shop._id) {
-          <div class="min-w-[260px] bg-white border border-slate-100 rounded-[0.5rem] shadow-sm hover:shadow-2xl transition-all duration-500 p-3 group">
+        @if (loadingBoutiques()) {
+          @for (i of [1,2,3,4]; track i) {
+            <div class="min-w-[260px] bg-white border border-slate-100 rounded-[0.5rem] p-3 animate-pulse">
+              <div class="w-full h-40 bg-slate-200 rounded-[2rem] mb-4"></div>
+              <div class="px-3 space-y-3">
+                <div class="h-4 bg-slate-200 w-3/4 rounded"></div>
+                <div class="h-2 bg-slate-100 w-1/2 rounded"></div>
+                <div class="pt-3 border-t border-slate-50 flex justify-between">
+                  <div class="space-y-2"><div class="h-2 w-16 bg-slate-100"></div><div class="h-2 w-12 bg-slate-100"></div></div>
+                  <div class="w-8 h-8 rounded-full bg-slate-100"></div>
+                </div>
+              </div>
+            </div>
+          }
+        }
+        @for (shop of boutiques()?.data; track shop._id) {
+          <div (click)="toBoutiqueDetail(shop._id)" class="min-w-[260px] bg-white border border-slate-100 rounded-[0.5rem] shadow-sm hover:shadow-2xl transition-all duration-500 p-3 group">
             <div class="relative overflow-hidden rounded-[2rem] mb-4">
               <img [src]="shop.logoUrl" class="w-full h-40 object-cover bg-slate-50 transition-transform duration-700 group-hover:scale-110">
               <div class="absolute inset-0 bg-gradient-to-t from-dark-blue/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -62,7 +85,7 @@
           </div>
         }
 
-        @if (boutiques().pagination.hasMore) {
+        @if (boutiques()?.pagination?.hasMore) {
           <div class="min-w-[200px] flex items-center justify-center">
             <button class="text-slate-500 font-semibold hover:underline">
               Voir plus →
@@ -90,8 +113,23 @@
         class="absolute left-0 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md border border-slate-100 shadow-xl p-2.5 rounded-full z-10 opacity-0 group-hover/nav:opacity-100 transition-all">‹</button>
 
       <div #promoContainer class="flex gap-6 overflow-x-auto scroll-smooth no-scrollbar px-1">
-        @for (promo of promotions().data; track promo._id) {
-          <div class="min-w-[340px] bg-white border border-slate-100 rounded-[0.5rem] shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden group">
+      @if (this.loadingPromotions()) {
+        @for (i of [1,2]; track i) {
+          <div class="min-w-[340px] bg-white border border-slate-100 rounded-[0.5rem] overflow-hidden animate-pulse">
+            <div class="h-52 bg-slate-200"></div>
+            <div class="p-6 space-y-4">
+              <div class="space-y-2">
+                <div class="h-2 bg-slate-100 w-20"></div>
+                <div class="h-5 bg-slate-200 w-full"></div>
+                <div class="h-3 bg-slate-100 w-2/3"></div>
+              </div>
+              <div class="h-16 bg-slate-50 rounded-2xl"></div>
+            </div>
+          </div>
+        }
+      }
+      @for (promo of promotions()?.data; track promo._id) {
+          <div (click)="toPromotionDetail(promo._id)" class="min-w-[340px] bg-white border border-slate-100 rounded-[0.5rem] shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden group">
             <div class="relative h-52 overflow-hidden">
               <img [src]="promo.imageUrl" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
               <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
@@ -149,7 +187,7 @@
             </div>
           </div>
         }
-        @if (promotions().pagination.hasMore) {
+        @if (promotions()?.pagination?.hasMore) {
           <div class="min-w-[200px] flex items-center justify-center">
             <button class="text-slate-500 font-semibold hover:underline">
               Voir plus →
@@ -177,6 +215,18 @@
         class="absolute left-0 top-1/2 -translate-y-1/2 bg-white/90 border border-slate-100 shadow-xl p-2.5 rounded-full z-10 opacity-0 group-hover/nav:opacity-100 transition-all">‹</button>
 
       <div #annContainer class="flex gap-6 overflow-x-auto scroll-smooth no-scrollbar px-1">
+        @if (loadingAnnonces()) {
+          @for (i of [1,2,3]; track i) {
+            <div class="min-w-[300px] bg-white border-t-[6px] border-slate-200 rounded-[0.5rem] p-8 animate-pulse">
+              <div class="h-2 bg-slate-100 w-24 mb-4"></div>
+              <div class="h-6 bg-slate-200 w-full mb-4"></div>
+              <div class="space-y-2">
+                <div class="h-3 bg-slate-100 w-full"></div>
+                <div class="h-3 bg-slate-100 w-5/6"></div>
+              </div>
+            </div>
+          }
+        }
         @for (ann of annonces(); track ann._id) {
           <div class="min-w-[300px] bg-white border-t-[6px] border-yellow rounded-[0.5rem] shadow-sm hover:shadow-xl transition-all duration-500 p-8 relative overflow-hidden group">
             <div class="absolute -top-10 -right-10 w-32 h-32 bg-yellow/5 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
