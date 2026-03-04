@@ -1,4 +1,4 @@
-import { Component, effect, OnInit } from '@angular/core';
+import { Component, computed, effect, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ZodFormValidators } from '../../services/zod-form-validators.service';
 import { LoginSchema } from '../../shemas/login.shema';
@@ -23,10 +23,12 @@ export class LoginComponent implements OnInit {
   };
 
   loginForm:FormGroup = new FormGroup({
-      username: new FormControl(null, { validators: [ZodFormValidators.fromZod(LoginSchema.shape.username)] }),
-      password: new FormControl<string|null>(null, { validators: [ZodFormValidators.fromZod(LoginSchema.shape.password)] })
+    username: new FormControl(null, { validators: [ZodFormValidators.fromZod(LoginSchema.shape.username)] }),
+    password: new FormControl<string|null>(null, { validators: [ZodFormValidators.fromZod(LoginSchema.shape.password)] })
   });
   showLogin: boolean = false;
+
+  loadingLogin = computed(()=>this.authStore.loadingLogin());
   constructor(private authStore:AuthStore, private router:Router, private notificationService: NotificationService){
     effect(() => {
       if (this.authStore.successLogin()) {

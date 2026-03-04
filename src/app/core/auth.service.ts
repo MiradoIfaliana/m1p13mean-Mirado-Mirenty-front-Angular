@@ -1,4 +1,4 @@
-import { HttpContext, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MyAuthHttpClient } from '../a-httpclient-simulation/my-auth-http-client-public';
@@ -24,7 +24,7 @@ export const ROLE_REDIRECT: Record<string, string> = {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private API_URL = environment.apiUrl+'/auth';
-  constructor( private http:MyAuthHttpClient, private httpNoInterceptors:MyHttpNoInterceptors ){ }
+  constructor( private http:HttpClient, private httpNoInterceptors:MyHttpNoInterceptors ){ }
 
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.API_URL}/login`,{email,password},{ context: new HttpContext().set(NO_AUTH, true)});
@@ -53,7 +53,7 @@ export class AuthService {
   }
 
   restoreUserSession():Observable<any> {
-    return this.http.get<any>(`${this.API_URL}/me`,/*juste atao eto fotsiny pour teste */this.token);
+    return this.http.get<any>(`${this.API_URL}/me`);
   }
 
 

@@ -74,10 +74,22 @@
 
       <!-- Bouton Valider -->
       <div class="flex flex-col gap-3 space-y-2">
-        <button type="submit"
-          [disabled]="registerForm.invalid"
-          class="w-full mt-6 py-4 bg-dark-blue/90 text-white font-bold rounded-lg shadow-lg hover:bg-dark-blue disabled:bg-gray-300 disabled:shadow-none transition-all">
-          S'INSCRIRE
+        <button type="submit" [disabled]="registerForm.invalid || loadingRgst()"
+          class="relative w-full py-4 bg-dark-blue text-white font-black text-xs uppercase tracking-[2px] rounded-xl shadow-xl hover:bg-teal disabled:bg-slate-200 disabled:shadow-none transition-all active:scale-95 shadow-dark-blue/10 overflow-hidden">
+
+          @if(loadingRgst()) {
+            <!-- ANIMATION LOADING MODERNE -->
+            <div class="absolute inset-0 flex items-center justify-center bg-dark-blue/10 backdrop-blur-[1px]">
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                <div class="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+              </div>
+            </div>
+            <span class="opacity-0">S'INSCRIRE</span>
+          } @else {
+            <span>S'INSCRIRE</span>
+          }
         </button>
         <a routerLink="/home" type="button" class="text-sm text-gray-500 font-medium hover:underline">
           Retour à l'accueil

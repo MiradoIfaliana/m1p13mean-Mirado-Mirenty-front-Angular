@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://api.monsite.com' // URL pour le prod
+  apiUrl: 'https://m1p13mean-mirenty-mirado-back-express.onrender.com/palamyre'
 };
