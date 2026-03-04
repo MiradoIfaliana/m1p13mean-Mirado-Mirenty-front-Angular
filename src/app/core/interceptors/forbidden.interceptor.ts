@@ -28,7 +28,7 @@ export const forbiddenInterceptor: HttpInterceptorFn = (req, next) => {
         //   { duration: 4000, panelClass: ['error-snackbar'] }
         // );
 
-        notifToast.showError('Session expirée ou Accès refusé — reconnectez-vous.');
+        notifToast.showError('Erreur d\'authentification.');
 
         // Tentative optionnelle de logout côté serveur sans déclencher d'autres interceptors :
         try {

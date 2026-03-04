@@ -1,4 +1,4 @@
-import { Component, effect } from '@angular/core';
+import { Component, computed, effect } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ZodFormValidators } from '../../services/zod-form-validators.service';
@@ -22,6 +22,7 @@ export class RegisterUserComponent {
     email:new FormControl(null, { validators: [ZodFormValidators.fromZod(RegisterUserSchema.shape.email)] }),
     password:new FormControl(null, { validators: [ZodFormValidators.fromZod(RegisterUserSchema.shape.password)] }),
   });
+  loadingRgst = computed(()=>this.authStore.loadingRgst());
   constructor(private notificationService : NotificationService, private router: Router, private authStore : AuthStore){
     effect(() => {
       if (this.authStore.successRgst()) {

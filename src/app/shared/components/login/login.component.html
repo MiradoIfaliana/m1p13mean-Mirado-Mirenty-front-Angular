@@ -71,10 +71,23 @@
           </div>
         </div>
         <div class="mb-8 px-13">
-          <button type="submit" [disabled]="loginForm.invalid"
-            class="disabled:opacity-80 disabled:cursor-not-allowed w-full py-2 px-4 bg-dark-blue opacity-90 text-white font-semibold rounded-2xl shadow-md hover:bg-dark-blue hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-dark-blue focus:ring-opacity-75">
-            SE CONNECTER
-          </button>
+          <button type="submit" [disabled]="loginForm.invalid || loadingLogin()"
+          class="relative w-full py-4 bg-dark-blue text-white font-black text-xs uppercase tracking-[2px] rounded-xl shadow-xl hover:bg-teal disabled:bg-slate-200 disabled:shadow-none transition-all active:scale-95 shadow-dark-blue/10 overflow-hidden">
+
+          @if(loadingLogin()) {
+            <!-- ANIMATION LOADING MODERNE -->
+            <div class="absolute inset-0 flex items-center justify-center bg-dark-blue/10 backdrop-blur-[1px]">
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                <div class="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                <div class="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+              </div>
+            </div>
+            <span class="opacity-0">SE CONNECTER</span>
+          } @else {
+            <span>SE CONNECTER</span>
+          }
+        </button>
         </div>
       </form>
       <div class="mt-6 text-center">
